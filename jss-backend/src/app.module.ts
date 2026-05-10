@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm'; 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { JobsModule } from './jobs/jobs.module';
+import { ApplicationsModule } from './applications/applications.module';
 
 @Module({
   imports: [
@@ -13,10 +16,13 @@ import { AppService } from './app.service';
       password: '191035',
       database: 'job_searching_system',
       autoLoadEntities: true,
-      synchronize: false, 
+      synchronize: false,
     }),
+
+    AuthModule,
+    UsersModule,
+    JobsModule,
+    ApplicationsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

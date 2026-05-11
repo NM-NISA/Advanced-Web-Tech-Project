@@ -24,4 +24,7 @@ export class Application {
 
   @Column({ default: 'pending' })
   status: string;
+
+  @Column({ nullable: true })
+  cv_file: string;
 }

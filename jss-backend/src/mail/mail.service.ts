@@ -78,4 +78,27 @@ export class MailService {
 
     console.log('Email sent successfully');
   }
+
+  async sendResetPasswordEmail(
+    to: string,
+    resetLink: string,
+  ) {
+    await this.mailerService.sendMail({
+      to,
+
+      subject: 'Reset Your Password',
+
+      html: `
+        <h2>Password Reset Request</h2>
+
+        <p>Click below link to reset password:</p>
+
+        <a href="${resetLink}">
+          Reset Password
+        </a>
+
+        <p>Link expires in 15 minutes.</p>
+      `,
+    });
+  }
 }

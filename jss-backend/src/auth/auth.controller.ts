@@ -5,6 +5,8 @@ import {
   Post,
   Request,
   UseGuards,
+  Patch,
+  Param
 } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
@@ -16,6 +18,12 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 
 import { Roles } from './decorators/roles.decorator';
+
+import { UpdatePasswordDto } from './dto/update-password.dto';
+
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -62,5 +70,37 @@ export class AuthController {
     return {
       message: 'Welcome Job Seeker',
     };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('update-password')
+  updatePassword(
+    @Request() req,
+    @Body() updateDto: UpdatePasswordDto,
+  ) {
+    return this.authService.updatePassword(
+      req.user.id,
+      updateDto,
+    );
+  }
+
+  @Post('forgot-password')
+  forgotPassword(
+    @Body() forgotDto: ForgotPasswordDto,
+  ) {
+    return this.authService.forgotPassword(
+      forgotDto,
+    );
+  }
+
+  @Post('reset-password/:token')
+  resetPassword(
+    @Param('token') token: string,
+    @Body() resetDto: ResetPasswordDto,
+  ) {
+    return this.authService.resetPassword(
+      token,
+      resetDto,
+    );
   }
 }

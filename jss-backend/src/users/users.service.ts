@@ -26,4 +26,16 @@ export class UsersService {
       where: { id },
     });
   }
+
+  async save(user: User) {
+    return this.userRepo.save(user);
+  }
+
+  async findByResetToken(token: string) {
+    return this.userRepo.findOne({
+      where: {
+        reset_token: token,
+      },
+    });
+  } 
 }

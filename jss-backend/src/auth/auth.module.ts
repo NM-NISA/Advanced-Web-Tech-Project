@@ -8,6 +8,8 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { JwtStrategy } from './strategies/jwt.strategy';
 
+import { MailModule } from '../mail/mail.module';
+
 @Module({
   imports: [
     UsersModule,
@@ -18,6 +20,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         expiresIn: '1d',
       },
     }),
+
+    MailModule,
   ],
 
   providers: [AuthService, JwtStrategy],

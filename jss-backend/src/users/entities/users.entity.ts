@@ -32,6 +32,18 @@ export class User {
   @CreateDateColumn()
   created_at: Date;
 
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  reset_token: string | null;
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  reset_token_expiry: Date | null;
+
   @OneToMany(() => Job, (job) => job.employer)
   jobs: Job[];
 

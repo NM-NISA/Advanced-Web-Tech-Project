@@ -5,6 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { JobsModule } from './jobs/jobs.module';
 import { ApplicationsModule } from './applications/applications.module';
+import { ConfigModule } from '@nestjs/config';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -19,10 +21,15 @@ import { ApplicationsModule } from './applications/applications.module';
       synchronize: false,
     }),
 
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
     AuthModule,
     UsersModule,
     JobsModule,
     ApplicationsModule,
+    MailModule,
   ],
 })
 export class AppModule {}

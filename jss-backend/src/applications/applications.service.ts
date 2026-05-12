@@ -19,15 +19,19 @@ import { CreateApplicationDto } from './dto/create-application.dto';
 
 import { UpdateApplicationDto } from './dto/update-application.dto';
 
+import { MailService } from '../mail/mail.service';
+
 @Injectable()
 export class ApplicationsService {
   constructor(
-    @InjectRepository(Application)
-    private applicationRepo: Repository<Application>,
+  @InjectRepository(Application)
+  private applicationRepo: Repository<Application>,
 
-    @InjectRepository(Job)
-    private jobRepo: Repository<Job>,
-  ) {}
+  @InjectRepository(Job)
+  private jobRepo: Repository<Job>,
+
+  private mailService: MailService,
+) {}
 
 async apply(
   createDto: CreateApplicationDto,
@@ -65,7 +69,21 @@ async apply(
     cv_file: cvFile,
   });
 
-  return this.applicationRepo.save(application);
+  const savedApplication =
+  await this.applicationRepo.save(application);
+
+  await this.mailService.sendApplicationSuccessEmail(
+    user.email,
+    job.title,
+  );
+
+  await this.mailService.notifyEmployer(
+    job.employer.email,
+    user.full_name,
+    job.title,
+  );
+
+  return savedApplication;
 }
 
   async myApplications(user: User) {
@@ -109,7 +127,11 @@ async apply(
     const application =
       await this.applicationRepo.findOne({
         where: { id: applicationId },
-        relations: ['job', 'job.employer'],
+        relations: [
+          'job',
+          'job.employer',
+          'user',
+        ],
       });
 
     if (!application) {
@@ -128,6 +150,15 @@ async apply(
 
     application.status = updateDto.status;
 
-    return this.applicationRepo.save(application);
+    const updatedApplication =
+    await this.applicationRepo.save(application);
+
+    await this.mailService.sendStatusUpdateEmail(
+      application.user.email,
+      application.status,
+      application.job.title,
+    );
+
+    return updatedApplication;
   }
 }

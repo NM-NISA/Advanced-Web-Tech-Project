@@ -9,6 +9,7 @@ import {
   Put,
   Request,
   UseGuards,
+  Query
 } from '@nestjs/common';
 
 import { JobsService } from './jobs.service';
@@ -20,6 +21,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
 import { Roles } from '../auth/decorators/roles.decorator';
+
+import { FilterJobDto } from './dto/filter-job.dto';
 
 @Controller('jobs')
 export class JobsController {
@@ -39,8 +42,8 @@ export class JobsController {
   }
 
   @Get()
-  findAll() {
-    return this.jobsService.findAll();
+  findAll(@Query() filterDto: FilterJobDto) {
+    return this.jobsService.findAll(filterDto);
   }
 
   @Get(':id')

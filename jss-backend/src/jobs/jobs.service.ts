@@ -15,6 +15,8 @@ import { UpdateJobDto } from './dto/update-job.dto';
 
 import { User } from '../users/entities/users.entity';
 
+import { FilterJobDto } from './dto/filter-job.dto';
+
 @Injectable()
 export class JobsService {
   constructor(
@@ -31,11 +33,81 @@ export class JobsService {
     return this.jobRepo.save(job);
   }
 
-  async findAll() {
-    return this.jobRepo.find({
-      relations: ['employer'],
-    });
+  async findAll(filterDto: FilterJobDto) {
+  const {
+    title,
+    location,
+    minSalary,
+    maxSalary,
+    page = 1,
+    limit = 5,
+  } = filterDto;
+
+  const query =
+    this.jobRepo.createQueryBuilder('job');
+
+  query.leftJoinAndSelect(
+    'job.employer',
+    'employer',
+  );
+
+  if (title) {
+    query.andWhere(
+      'LOWER(job.title) LIKE LOWER(:title)',
+      {
+        title: `%${title}%`,
+      },
+    );
   }
+
+  if (location) {
+    query.andWhere(
+      'LOWER(job.location) LIKE LOWER(:location)',
+      {
+        location: `%${location}%`,
+      },
+    );
+  }
+
+  if (minSalary) {
+    query.andWhere(
+      'job.salary >= :minSalary',
+      {
+        minSalary,
+      },
+    );
+  }
+
+  if (maxSalary) {
+    query.andWhere(
+      'job.salary <= :maxSalary',
+      {
+        maxSalary,
+      },
+    );
+  }
+
+  query.skip((page - 1) * limit);
+
+  query.take(limit);
+
+  query.orderBy('job.id', 'DESC');
+
+  const [jobs, total] =
+    await query.getManyAndCount();
+
+  return {
+    total,
+
+    page,
+
+    limit,
+
+    totalPages: Math.ceil(total / limit),
+
+    jobs,
+  };
+}
 
   async findOne(id: number) {
     const job = await this.jobRepo.findOne({

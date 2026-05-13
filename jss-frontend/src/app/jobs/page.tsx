@@ -84,7 +84,7 @@ export default function JobsPage() {
 
           <button
             onClick={handleSearch}
-            className="bg-blue-600 text-white px-5 rounded"
+            className="bg-blue-600 text-white px-5 rounded hover:bg-blue-700"
           >
             Search
           </button>
@@ -107,7 +107,7 @@ export default function JobsPage() {
           <button
             onClick={handlePrevious}
             disabled={page === 1}
-            className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+            className="px-4 py-2 bg-gray-300 rounded hover:file:bg-gray-400 disabled:opacity-50"
           >
             Previous
           </button>
@@ -119,7 +119,7 @@ export default function JobsPage() {
           <button
             onClick={handleNext}
             disabled={page === totalPages}
-            className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:file:bg-blue-700 disabled:opacity-50"
           >
             Next
           </button>

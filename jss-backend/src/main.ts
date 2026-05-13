@@ -23,12 +23,9 @@ async function bootstrap() {
     prefix: '/uploads/',
   });
 
-  app.enableCors({
-    origin: 'http://localhost:4000',
-    credentials: true,
-  });
+  app.enableCors();
 
-  await app.listen(3000);
+  await app.listen(5000);
 }
 
 bootstrap();

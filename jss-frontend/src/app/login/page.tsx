@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -27,6 +27,26 @@ export default function LoginPage() {
     });
   };
 
+  useEffect(() => {
+    const token =
+      localStorage.getItem('token');
+
+    const role =
+      localStorage.getItem('role');
+
+    if (token && role) {
+      if (role === 'jobseeker') {
+        window.location.href =
+          '/dashboard';
+      } else if (
+        role === 'employer'
+      ) {
+        window.location.href =
+          '/employer';
+      }
+    }
+  }, []);
+
   const handleSubmit = async (
     e: React.FormEvent,
   ) => {
@@ -43,9 +63,41 @@ export default function LoginPage() {
         response.data.access_token,
       );
 
+      localStorage.setItem(
+        'role',
+        response.data.user.role,
+      );
+
+      localStorage.setItem(
+        'user',
+        JSON.stringify(response.data.user),
+      );
+
       toast.success('Login successful');
 
-      router.push('/');
+      if (
+        response.data.user.role ===
+        'employer'
+      ) {
+        window.location.href =
+          '/employer';
+      } else if (
+        response.data.user.role ===
+        'jobseeker'
+      ) {
+        window.location.href =
+          '/dashboard';
+      } else if (
+        response.data.user.role ===
+        'admin'
+      ) {
+        window.location.href =
+          '/admin';
+      } else {
+        window.location.href = '/';
+      }
+
+      window.location.reload();
     } catch (error: any) {
       toast.error(
         error.response?.data?.message ||

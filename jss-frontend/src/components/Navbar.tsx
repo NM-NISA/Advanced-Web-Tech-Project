@@ -9,60 +9,71 @@ import { useEffect, useState } from 'react';
 export default function Navbar() {
   const router = useRouter();
 
-  const [token, setToken] = useState<
-    string | null
-  >(null);
+  const [token, setToken] = useState<string | null>(null);
 
-  const [mounted, setMounted] =
-    useState(false);
+  const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
-    setMounted(true);
+    const storedToken = localStorage.getItem('token');
 
-    const storedToken =
-      localStorage.getItem('token');
+    const storedRole = localStorage.getItem('role');
 
     setToken(storedToken);
+
+    setRole(storedRole);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
 
-    setToken(null);
+    localStorage.removeItem('role');
 
-    router.push('/login');
+    localStorage.removeItem('user');
+
+    window.location.href = '/login';
   };
 
-  if (!mounted) {
-    return null;
-  }
-
   return (
-    <nav className="bg-blue-600 text-white px-8 py-4 flex justify-between">
-      <h1 className="text-2xl font-bold">
+    <nav className="bg-blue-600 text-white px-8 py-4 flex justify-between items-center">
+      <Link
+        href="/"
+        className="text-2xl font-bold"
+      >
         Job Searching System
-      </h1>
+      </Link>
 
-      <div className="space-x-6">
+      <div className="flex items-center gap-6">
         <Link href="/">Home</Link>
 
         <Link href="/about">About</Link>
 
         <Link href="/jobs">Jobs</Link>
 
-        {token ? (
+        {token && role === 'jobseeker' && (
           <>
             <Link href="/dashboard">
               Dashboard
             </Link>
-
-            <button
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
           </>
-        ) : (
+        )}
+
+        {token && role === 'employer' && (
+          <>
+            <Link href="/employer">
+              Employer Panel
+            </Link>
+          </>
+        )}
+
+        {token && role === 'admin' && (
+          <>
+            <Link href="/admin">
+              Admin Panel
+            </Link>
+          </>
+        )}
+
+        {!token && (
           <>
             <Link href="/login">
               Login
@@ -72,6 +83,14 @@ export default function Navbar() {
               Signup
             </Link>
           </>
+        )}
+
+        {token && (
+          <button
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
         )}
       </div>
     </nav>

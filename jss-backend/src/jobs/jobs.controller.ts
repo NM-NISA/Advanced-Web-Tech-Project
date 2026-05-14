@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Patch,
   Request,
   UseGuards,
   Query
@@ -51,18 +52,27 @@ export class JobsController {
     return this.jobsService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('employer')
-  @Put(':id')
+  @Get('employer/my-jobs')
+  @UseGuards(JwtAuthGuard)
+  getEmployerJobs(
+    @Request() req,
+  ) {
+    return this.jobsService.getEmployerJobs(
+      req.user.id,
+    );
+  } 
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateJobDto: UpdateJobDto,
+    @Param('id') id: number,
+    @Body() dto: UpdateJobDto,
     @Request() req,
   ) {
     return this.jobsService.update(
-      id,
-      updateJobDto,
-      req.user,
+      Number(id),
+      dto,
+      req.user.id,
     );
   }
 

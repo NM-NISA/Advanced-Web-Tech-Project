@@ -122,20 +122,45 @@ export class JobsService {
     return job;
   }
 
+  async getEmployerJobs(
+    employerId: number,
+  ) {
+    return this.jobRepo.find({
+      where: {
+        employer: {
+          id: employerId,
+        },
+      },
+    });
+  }
+
   async update(
     id: number,
-    updateJobDto: UpdateJobDto,
-    user: any,
+    dto: UpdateJobDto,
+    employerId: number,
   ) {
-    const job = await this.findOne(id);
+    const job =
+      await this.jobRepo.findOne({
+        where: { id },
+        relations: ['employer'],
+      });
 
-    if (job.employer.id !== user.id) {
-      throw new ForbiddenException(
-        'You can update only your own jobs',
+    if (!job) {
+       throw new NotFoundException(
+        'Job not found',
       );
     }
 
-    Object.assign(job, updateJobDto);
+    if (
+      job.employer.id !==
+      employerId
+    ) {
+      throw new ForbiddenException(
+        'Unauthorized',
+      );
+    }
+
+    Object.assign(job, dto);
 
     return this.jobRepo.save(job);
   }

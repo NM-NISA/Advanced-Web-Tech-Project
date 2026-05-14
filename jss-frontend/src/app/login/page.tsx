@@ -43,6 +43,11 @@ export default function LoginPage() {
       ) {
         window.location.href =
           '/employer';
+      } else if (
+        role === 'admin'
+      ) {
+        window.location.href =
+          '/admin';
       }
     }
   }, []);

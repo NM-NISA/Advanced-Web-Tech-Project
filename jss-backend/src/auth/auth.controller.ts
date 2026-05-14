@@ -39,10 +39,12 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('me')
+  @UseGuards(JwtAuthGuard)
   getProfile(@Request() req) {
-    return req.user;
+    return this.authService.getProfile(
+      req.user.id,
+    );
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

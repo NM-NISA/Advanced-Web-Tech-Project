@@ -161,4 +161,26 @@ async apply(
 
     return updatedApplication;
   }
+
+  async remove(id: number) {
+    const application =
+      await this.applicationRepo.findOne({
+        where: { id },
+      });
+
+    if (!application) {
+      throw new NotFoundException(
+        'Application not found',
+      );
+    }
+
+    await this.applicationRepo.remove(
+      application,
+    );
+
+    return {
+      message:
+        'Application withdrawn successfully',
+    };
+  }
 }

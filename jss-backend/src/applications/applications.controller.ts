@@ -34,6 +34,8 @@ import { CreateApplicationDto } from './dto/create-application.dto';
 
 import { UpdateApplicationDto } from './dto/update-application.dto';
 
+import { Delete } from '@nestjs/common';
+
 @Controller('applications')
 export class ApplicationsController {
   constructor(
@@ -125,6 +127,17 @@ apply(
       id,
       updateDto,
       req.user,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('jobseeker')
+  @Delete(':id')
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.applicationsService.remove(
+      id,
     );
   }
 }

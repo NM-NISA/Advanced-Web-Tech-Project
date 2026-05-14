@@ -98,6 +98,26 @@ export class AuthService {
     };
   }
 
+  async getProfile(id: number) {
+    const user = await this.usersService.findById(
+      id,
+    );
+
+    if (!user) {
+      throw new NotFoundException(
+        'User not found',
+      );
+    }
+
+    return {
+      id: user.id,
+      email: user.email,
+      full_name: user.full_name,
+      phone: user.phone,
+      role: user.role,
+    };
+  }
+
   async updatePassword(
     userId: number,
     updateDto: UpdatePasswordDto,

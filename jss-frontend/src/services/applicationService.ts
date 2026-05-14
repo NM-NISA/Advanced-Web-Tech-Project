@@ -23,3 +23,21 @@ export const applyForJob = async (
 
   return res.data;
 };
+
+export const getMyApplications =
+  async () => {
+    const res = await api.get(
+      '/applications/my',
+    );
+
+    return res.data;
+  };
+
+export const withdrawApplication =
+  async (id: number) => {
+    const res = await api.delete(
+      `/applications/${id}`,
+    );
+
+    return res.data;
+  };

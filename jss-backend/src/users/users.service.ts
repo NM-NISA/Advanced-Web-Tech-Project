@@ -37,5 +37,26 @@ export class UsersService {
         reset_token: token,
       },
     });
-  } 
+  }
+  
+  async updateProfile(
+    userId: number,
+    updateDto: any,
+  ) {
+
+    const user =
+      await this.findById(userId);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    user.full_name =
+      updateDto.full_name;
+
+    user.phone =
+      updateDto.phone;
+
+    return this.userRepo.save(user);
+  }
 }

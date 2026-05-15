@@ -10,6 +10,8 @@ import api from '@/services/api';
 
 import toast, { Toaster } from 'react-hot-toast';
 
+import Link from 'next/link';
+
 export default function LoginPage() {
   const router = useRouter();
 
@@ -145,6 +147,16 @@ export default function LoginPage() {
           <button className="w-full bg-blue-600 text-white py-3 rounded">
             Login
           </button>
+
+          <div className="text-center">
+            <Link
+                href="/forgot-password"
+                className="text-blue-600"
+            >
+              Forgot Password?
+            </Link>
+          </div>
+
         </form>
       </div>
     </div>

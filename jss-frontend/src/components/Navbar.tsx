@@ -60,7 +60,7 @@ export default function Navbar() {
         {token && role === 'employer' && (
           <>
             <Link href="/employer">
-              Employer Panel
+              Dashboard
             </Link>
           </>
         )}
@@ -68,7 +68,7 @@ export default function Navbar() {
         {token && role === 'admin' && (
           <>
             <Link href="/admin">
-              Admin Panel
+              Dashboard
             </Link>
           </>
         )}

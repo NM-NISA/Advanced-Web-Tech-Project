@@ -17,6 +17,8 @@ import toast, {
   Toaster,
 } from 'react-hot-toast';
 
+import ProfileSection from '@/components/profile/ProfileSection';
+
 export default function DashboardPage() {
   const [applications, setApplications] =
     useState<any[]>([]);
@@ -79,38 +81,11 @@ export default function DashboardPage() {
 
       <Toaster />
 
-      <div className="max-w-6xl mx-auto p-8">
-        <div className="bg-white shadow-md rounded-lg p-6 mb-8">
-          <h2 className="text-3xl font-bold text-blue-700 mb-4">
-            My Profile
-          </h2>
+      <div className="max-w-8xl mx-auto bg-gray-100 p-8">
+        
+        <ProfileSection profile={profile} />
 
-          {profile && (
-            <div className="space-y-2">
-              <p>
-                <b>Name:</b>{' '}
-                {profile.full_name}
-              </p>
-
-              <p>
-                <b>Email:</b>{' '}
-                {profile.email}
-              </p>
-
-              <p>
-                <b>Phone:</b>{' '}
-                {profile.phone}
-              </p>
-
-              <p>
-                <b>Role:</b>{' '}
-                {profile.role}
-              </p>
-            </div>
-          )}
-        </div>
-
-        <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
           <h2 className="text-3xl font-bold text-blue-700 mb-6">
             My Applications
           </h2>

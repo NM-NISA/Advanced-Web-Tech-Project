@@ -16,6 +16,10 @@ import {
   getStats,
 } from '@/services/adminService';
 
+import ProfileSection from '@/components/profile/ProfileSection';
+
+import { getProfile } from '@/services/authService';
+
 export default function AdminPage() {
   const [users, setUsers] =
     useState<any[]>([]);
@@ -24,6 +28,9 @@ export default function AdminPage() {
     useState<any[]>([]);
 
   const [stats, setStats] =
+    useState<any>(null);
+
+  const [profile, setProfile] =
     useState<any>(null);
 
   const fetchData = async () => {
@@ -37,11 +44,17 @@ export default function AdminPage() {
       const statsData =
         await getStats();
 
+      const profileData =
+        await getProfile();
+
       setUsers(usersData);
 
       setJobs(jobsData);
 
       setStats(statsData);
+
+      setProfile(profileData);
+
     } catch (error) {
       console.log(error);
     }
@@ -97,7 +110,9 @@ export default function AdminPage() {
 
       <div className="max-w-8xl mx-auto bg-gray-100 p-8">
 
-        <div className="grid grid-cols-3 gap-6 mb-10">
+        <ProfileSection profile={profile} />
+
+        <div className="max-w-4xl mx-auto grid grid-cols-3 gap-6 mb-10">
 
           <div className="bg-blue-600 text-white rounded-lg p-6 shadow-md">
             <h2 className="text-2xl font-bold">
@@ -140,7 +155,7 @@ export default function AdminPage() {
 
         </div>
 
-        <div className="bg-white shadow-md rounded-lg p-6 mb-10">
+        <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6 mb-10">
           <h2 className="text-3xl font-bold text-blue-700 mb-6">
             Users
           </h2>
@@ -183,7 +198,7 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
           <h2 className="text-3xl font-bold text-blue-700 mb-6">
             Jobs
           </h2>

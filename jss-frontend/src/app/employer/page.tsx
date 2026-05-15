@@ -17,6 +17,10 @@ import {
   updateApplicationStatus,
 } from '@/services/employerService';
 
+import ProfileSection from '@/components/profile/ProfileSection';
+
+import { getProfile } from '@/services/authService';
+
 export default function EmployerPage() {
   const [jobs, setJobs] = useState<any[]>([]);
 
@@ -32,6 +36,9 @@ export default function EmployerPage() {
     setEditingJobId] =
     useState<number | null>(null);
 
+  const [profile, setProfile] =
+    useState<any>(null);
+
   const [formData, setFormData] =
     useState({
       title: '',
@@ -46,6 +53,12 @@ export default function EmployerPage() {
         await getEmployerJobs();
 
       setJobs(data);
+
+      const profileData =
+        await getProfile();
+
+      setProfile(profileData);
+
     } catch (error) {
       console.log(error);
     }
@@ -220,9 +233,11 @@ export default function EmployerPage() {
 
       <Toaster />
 
-      <div className="max-w-7xl mx-auto p-8">
+      <div className="max-w-8xl mx-auto bg-gray-100 p-8">
 
-        <div className="bg-white shadow-md rounded-lg p-6 mb-10">
+        <ProfileSection profile={profile} />
+
+        <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6 mb-10">
           <h2 className="text-3xl font-bold text-blue-700 mb-6">
             {editingJobId
               ? 'Edit Job'
@@ -312,7 +327,7 @@ export default function EmployerPage() {
           </form>
         </div>
 
-        <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
           <h2 className="text-3xl font-bold text-blue-700 mb-6">
             My Jobs
           </h2>
@@ -383,7 +398,7 @@ export default function EmployerPage() {
 
         {selectedApplicants.length >
           0 && (
-          <div className="bg-white shadow-md rounded-lg p-6 mt-10">
+          <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
             <h2 className="text-3xl font-bold text-blue-700 mb-6">
               Applicants
             </h2>
@@ -424,7 +439,7 @@ export default function EmployerPage() {
                       </p>
 
                       <a
-                        href={`http://localhost:3000/uploads/${applicant.cv_file}`}
+                        href={`http://localhost:5000/uploads/cv/${applicant.cv_file}`}
                         target="_blank"
                         className="text-green-600 mt-2 inline-block"
                       >

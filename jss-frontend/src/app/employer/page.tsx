@@ -21,6 +21,8 @@ import ProfileSection from '@/components/profile/ProfileSection';
 
 import { getProfile } from '@/services/authService';
 
+import { formatError } from '@/utils/errorFormatter';
+
 export default function EmployerPage() {
   const [jobs, setJobs] = useState<any[]>([]);
 
@@ -125,11 +127,7 @@ export default function EmployerPage() {
 
         fetchJobs();
       } catch (error: any) {
-        toast.error(
-          error.response?.data
-            ?.message ||
-            'Operation failed',
-        );
+        toast.error(formatError(error));
       }
     };
 
@@ -144,11 +142,7 @@ export default function EmployerPage() {
 
         fetchJobs();
       } catch (error: any) {
-        toast.error(
-          error.response?.data
-            ?.message ||
-            'Delete failed',
-        );
+        toast.error(formatError(error));
       }
     };
 
@@ -219,11 +213,7 @@ export default function EmployerPage() {
           );
         }
       } catch (error: any) {
-        toast.error(
-          error.response?.data
-            ?.message ||
-            'Update failed',
-        );
+        toast.error(formatError(error));
       }
     };
 

@@ -12,6 +12,8 @@ import {
   forgotPassword,
 } from '@/services/authService';
 
+import { formatError } from '@/utils/errorFormatter';
+
 export default function ForgotPasswordPage() {
 
   const [email, setEmail] =
@@ -41,11 +43,7 @@ export default function ForgotPasswordPage() {
 
         setEmail('');
       } catch (error: any) {
-        toast.error(
-          error.response?.data
-            ?.message ||
-            'Something went wrong',
-        );
+        toast.error(formatError(error));
       } finally {
         setLoading(false);
       }

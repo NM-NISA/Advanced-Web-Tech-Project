@@ -10,6 +10,8 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import { resetPassword } from '@/services/authService';
 
+import { formatError } from '@/utils/errorFormatter';
+
 export default function ResetPasswordPage() {
 
   const params = useParams();
@@ -42,10 +44,7 @@ export default function ResetPasswordPage() {
       }, 1500);
 
     } catch (error: any) {
-      toast.error(
-        error.response?.data?.message ||
-        'Reset failed',
-      );
+      toast.error(formatError(error));
     } finally {
       setLoading(false);
     }

@@ -20,6 +20,8 @@ import ProfileSection from '@/components/profile/ProfileSection';
 
 import { getProfile } from '@/services/authService';
 
+import { formatError } from '@/utils/errorFormatter';
+
 export default function AdminPage() {
   const [users, setUsers] =
     useState<any[]>([]);
@@ -75,11 +77,7 @@ export default function AdminPage() {
 
         fetchData();
       } catch (error: any) {
-        toast.error(
-          error.response?.data
-            ?.message ||
-            'Delete failed',
-        );
+        toast.error(formatError(error));
       }
     };
 
@@ -94,11 +92,7 @@ export default function AdminPage() {
 
         fetchData();
       } catch (error: any) {
-        toast.error(
-          error.response?.data
-            ?.message ||
-            'Delete failed',
-        );
+        toast.error(formatError(error));
       }
     };
 

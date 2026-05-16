@@ -19,6 +19,8 @@ import toast, {
 
 import ProfileSection from '@/components/profile/ProfileSection';
 
+import { formatError } from '@/utils/errorFormatter';
+
 export default function DashboardPage() {
   const [applications, setApplications] =
     useState<any[]>([]);
@@ -68,10 +70,7 @@ export default function DashboardPage() {
 
       fetchData();
     } catch (error: any) {
-      toast.error(
-        error.response?.data?.message ||
-          'Failed',
-      );
+      toast.error(formatError(error));
     }
   };
 

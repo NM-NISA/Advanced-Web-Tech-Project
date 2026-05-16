@@ -8,6 +8,8 @@ import api from '@/services/api';
 
 import toast, { Toaster } from 'react-hot-toast';
 
+import { formatError } from '@/utils/errorFormatter';
+
 export default function SignupPage() {
   const [formData, setFormData] = useState({
     email: '',
@@ -41,10 +43,7 @@ export default function SignupPage() {
 
       toast.success('Registration successful');
     } catch (error: any) {
-      toast.error(
-        error.response?.data?.message ||
-          'Registration failed',
-      );
+      toast.error(formatError(error));
     }
   };
 

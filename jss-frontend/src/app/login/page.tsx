@@ -12,6 +12,8 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import Link from 'next/link';
 
+import { formatError } from '@/utils/errorFormatter';
+
 export default function LoginPage() {
   const router = useRouter();
 
@@ -106,10 +108,7 @@ export default function LoginPage() {
 
       window.location.reload();
     } catch (error: any) {
-      toast.error(
-        error.response?.data?.message ||
-          'Login failed',
-      );
+      toast.error(formatError(error));
     }
   };
 

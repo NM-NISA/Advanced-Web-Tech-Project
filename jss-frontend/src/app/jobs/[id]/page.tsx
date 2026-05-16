@@ -8,11 +8,15 @@ import { getJobById } from '@/services/jobService';
 
 import { applyForJob } from '@/services/applicationService';
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 import toast, { Toaster } from 'react-hot-toast';
 
+import { formatError } from '@/utils/errorFormatter';
+
 export default function JobDetailsPage() {
+  const router = useRouter();
+
   const { id } = useParams();
 
   const [job, setJob] = useState<any>(null);
@@ -51,10 +55,7 @@ export default function JobDetailsPage() {
 
       setCvFile(null);
     } catch (error: any) {
-      toast.error(
-        error.response?.data?.message ||
-          'Application failed',
-      );
+      toast.error(formatError(error));
     } finally {
       setLoading(false);
     }
@@ -69,6 +70,13 @@ export default function JobDetailsPage() {
 
     <div className="max-w-4xl mx-auto px-4 py-10">
       <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100">
+
+        <button
+          onClick={() => router.push('/jobs')}
+          className="mb-6 text-gray-400 hover:text-gray-600 font-semibold transition"
+        >
+          &lt; &nbsp; Job List
+        </button>
 
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
           {job.title}

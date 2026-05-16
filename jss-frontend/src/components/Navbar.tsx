@@ -39,21 +39,29 @@ export default function Navbar() {
         href="/"
         className="text-2xl font-bold"
       >
-        Job Searching System
+        JSS Job Portal
       </Link>
 
       <div className="flex items-center gap-6">
         <Link href="/">Home</Link>
 
+        <span>|</span>
+
         <Link href="/about">About</Link>
 
+        <span>|</span>
+
         <Link href="/jobs">Jobs</Link>
+
+        <span>|</span>
 
         {token && role === 'jobseeker' && (
           <>
             <Link href="/dashboard">
               Dashboard
             </Link>
+
+            <span>|</span>
           </>
         )}
 
@@ -62,6 +70,8 @@ export default function Navbar() {
             <Link href="/employer">
               Dashboard
             </Link>
+
+            <span>|</span>
           </>
         )}
 
@@ -70,6 +80,8 @@ export default function Navbar() {
             <Link href="/admin">
               Dashboard
             </Link>
+
+            <span>|</span>
           </>
         )}
 
@@ -78,6 +90,8 @@ export default function Navbar() {
             <Link href="/login">
               Login
             </Link>
+
+            <span>|</span>
 
             <Link href="/signup">
               Signup

@@ -9,6 +9,8 @@ import { ConfigModule } from '@nestjs/config';
 import { MailModule } from './mail/mail.module';
 import { AdminModule } from './admin/admin.module';
 
+import { AiModule } from './ai/ai.module';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -32,6 +34,7 @@ import { AdminModule } from './admin/admin.module';
     ApplicationsModule,
     MailModule,
     AdminModule,
+    AiModule,
   ],
 })
 export class AppModule {}

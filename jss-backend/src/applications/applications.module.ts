@@ -12,6 +12,8 @@ import { ApplicationsService } from './applications.service';
 
 import { MailModule } from '../mail/mail.module';
 
+import { AiModule } from '../ai/ai.module';
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -19,6 +21,7 @@ import { MailModule } from '../mail/mail.module';
       Job,
     ]),
     MailModule,
+    AiModule
   ],
 
   controllers: [ApplicationsController],

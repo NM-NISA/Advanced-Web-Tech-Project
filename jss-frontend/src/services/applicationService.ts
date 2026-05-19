@@ -41,3 +41,12 @@ export const withdrawApplication =
 
     return res.data;
   };
+
+export const getApplicationAnalysis = 
+  async (id: number) => {
+    const res = await api.get(
+      `/applications/${id}/analyze`
+    );
+
+    return res.data;
+  };

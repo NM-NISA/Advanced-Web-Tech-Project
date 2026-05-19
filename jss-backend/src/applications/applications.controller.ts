@@ -36,6 +36,8 @@ import { UpdateApplicationDto } from './dto/update-application.dto';
 
 import { Delete } from '@nestjs/common';
 
+import { ResumeAnalysis } from '../ai/interfaces/resume-analysis.interface';
+
 @Controller('applications')
 export class ApplicationsController {
   constructor(
@@ -139,5 +141,24 @@ apply(
     return this.applicationsService.remove(
       id,
     );
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('jobseeker', 'employer')
+  @Get(':id/analyze')
+  analyzeApplication(
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.applicationsService.analyzeApplication(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('jobseeker', 'employer')
+  @Post('analyze-resume')
+  async analyzeResume(
+    @Body('cvPath') cvPath: string,
+    @Body('jobDescription') jobDescription: string,
+  ): Promise<ResumeAnalysis> {
+    return this.applicationsService.analyzeResume(cvPath, jobDescription);
   }
 }

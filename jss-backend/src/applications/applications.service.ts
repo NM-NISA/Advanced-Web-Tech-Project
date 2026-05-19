@@ -21,6 +21,12 @@ import { UpdateApplicationDto } from './dto/update-application.dto';
 
 import { MailService } from '../mail/mail.service';
 
+import { AiService } from '../ai/ai.service';
+
+import { join } from 'path';
+
+import { ResumeAnalysis } from '../ai/interfaces/resume-analysis.interface';
+
 @Injectable()
 export class ApplicationsService {
   constructor(
@@ -31,6 +37,8 @@ export class ApplicationsService {
   private jobRepo: Repository<Job>,
 
   private mailService: MailService,
+
+  private aiService: AiService,
 ) {}
 
 async apply(
@@ -182,5 +190,51 @@ async apply(
       message:
         'Application withdrawn successfully',
     };
+  }
+
+  async analyzeApplication(
+    applicationId: number,
+  ) {
+
+    if (isNaN(applicationId)) {
+      throw new BadRequestException('Invalid application ID');
+    }
+
+    const application =
+      await this.applicationRepo.findOne({
+        where: {
+          id: applicationId,
+        },
+        relations: [
+          'job',
+          'user',
+        ],
+      });
+
+    if (!application) {
+      throw new NotFoundException(
+        `Application with ID ${applicationId} not found`,
+      );
+    }
+
+    const cvPath = join(
+      process.cwd(),
+      'uploads/cv',
+      application.cv_file,
+    );
+
+    const analysis =
+      await this.aiService.analyzeResume(
+        cvPath,
+        application.job.description,
+      );
+
+    console.log('Analyzing Application ID:', applicationId);
+
+    return analysis;
+  }
+
+  async analyzeResume(cvPath: string, jobDescription: string): Promise<ResumeAnalysis> {
+    return this.aiService.analyzeResume(cvPath, jobDescription);
   }
 }

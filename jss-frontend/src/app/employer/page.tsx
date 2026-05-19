@@ -23,6 +23,8 @@ import { getProfile } from '@/services/authService';
 
 import { formatError } from '@/utils/errorFormatter';
 
+import { getApplicationAnalysis } from '@/services/applicationService';
+
 export default function EmployerPage() {
   const [jobs, setJobs] = useState<any[]>([]);
 
@@ -40,6 +42,9 @@ export default function EmployerPage() {
 
   const [profile, setProfile] =
     useState<any>(null);
+
+  const [analysis, setAnalysis] =
+    useState<{[key:number]: any}>({});
 
   const [formData, setFormData] =
     useState({
@@ -217,6 +222,17 @@ export default function EmployerPage() {
       }
     };
 
+  const handleAnalyze = async (
+    id: number
+  ) => {
+    try {
+      const result = await getApplicationAnalysis(id);
+      setAnalysis(prev => ({ ...prev, [id]: result }));
+    } catch (error: any) {
+      toast.error(formatError(error));
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -298,8 +314,8 @@ export default function EmployerPage() {
             <div className="flex gap-4">
               <button className="bg-blue-600 text-white px-6 py-3 rounded">
                 {editingJobId
-                  ? 'Update Job'
-                  : 'Create Job'}
+                  ? 'Update Job Post'
+                  : 'Create Job Post'}
               </button>
 
               {editingJobId && (
@@ -427,6 +443,28 @@ export default function EmployerPage() {
                           }
                         </span>
                       </p>
+
+                      <div className="mt-4">
+                        <button
+                          onClick={() => handleAnalyze(applicant.id)}
+                          className="bg-green-500 text-white px-4 py-2 rounded"
+                        >
+                          Show Analysis
+                        </button>
+                      </div>
+
+                      {analysis[applicant.id] && (
+                        <div className="mt-4 bg-gray-50 p-4 rounded">
+                          <p><strong>Score:</strong> {analysis[applicant.id].score}%</p>
+                          <p><strong>Missing Skills:</strong></p>
+                          <ul className="list-disc ml-6">
+                            {analysis[applicant.id].missingSkills.map((m: string, i: number) => (
+                              <li key={i}>{m}</li>
+                            ))}
+                          </ul>
+                          <p><strong>Recommendation:</strong> {analysis[applicant.id].recommendation}</p>
+                        </div>
+                      )}
 
                       <a
                         href={`http://localhost:5000/uploads/cv/${applicant.cv_file}`}
